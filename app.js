@@ -3,6 +3,10 @@ const express = require('express');
 
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log("Hello from the middleware!!!");
+    next()
+})
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/test-data/data/tour-simple.json`))
 
@@ -80,10 +84,6 @@ const deleteTour = (req, res) => {
         data: null
     })
 }
-
-app.get('/api/v1/tours/:id', getTour);
-app.patch('/api/v1/tours/:id', updateTour)
-app.delete('/api/v1/tours/:id', deleteTour)
 
 app.route('/api/v1/tours').get(getAllTours).post(createTour)
 app.route('/api/v1/tours/:id').get(getTour).patch(updateTour).delete(deleteTour)
