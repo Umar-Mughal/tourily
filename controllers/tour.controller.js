@@ -66,7 +66,17 @@ const checkIDMiddleware = (req, res, next) => {
         })
     }
     req.tour = tour
-    next()
+    next();
+}
+
+const checkBodyMiddleware = (req, res, next) => {
+    if(!req.body.name || !req.body.price){
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Missing name or price'
+        })
+    }
+    next();
 }
 
 module.exports = {
@@ -75,5 +85,6 @@ module.exports = {
     getTour,
     updateTour,
     deleteTour,
-    checkIDMiddleware
+    checkIDMiddleware,
+    checkBodyMiddleware
 }
