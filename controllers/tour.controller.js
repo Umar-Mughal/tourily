@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/../test-data/data/tour-simple.json`))
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/../test-data/tour/all-tours.json`))
 
 // Handlers
 const createTour = (req, res) => {
@@ -8,7 +8,7 @@ const createTour = (req, res) => {
     const newTour = Object.assign({id: newId}, req.body)
     tours.push(newTour)
 
-    fs.writeFile(`${__dirname}/test-data/data/tour-simple.json`, JSON.stringify(tours), (err) => {
+    fs.writeFile(`${__dirname}/test-data/tour/all-tours.json`, JSON.stringify(tours), (err) => {
         res.status(201).json({
             status: 'success',
             data: {
@@ -30,7 +30,6 @@ const getAllTours = (req, res) => {
 
 const getTour = (req, res) => {
     const { tour } = req
-
     res.status(200).json({
         status: 'success',
         data: {
