@@ -2,6 +2,7 @@ const fs = require('fs')
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/../test-data/data/tour-simple.json`))
 
+// Handlers
 const createTour = (req, res) => {
     const newId = tours[tours.length - 1].id + 1;
     const newTour = Object.assign({id: newId}, req.body)
@@ -28,15 +29,7 @@ const getAllTours = (req, res) => {
 }
 
 const getTour = (req, res) => {
-    const tourId = req.params.id * 1
-    const tour = tours.find(el => el.id === tourId);
-
-    if(!tour) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
+    const { tour } = req
 
     res.status(200).json({
         status: 'success',
@@ -47,14 +40,6 @@ const getTour = (req, res) => {
 }
 
 const updateTour = (req, res) => {
-
-    if(req.params.id > tours.length) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
-
     res.status(200).json({
         status: 'success',
         data: {
@@ -64,17 +49,24 @@ const updateTour = (req, res) => {
 }
 
 const deleteTour = (req, res) => {
-    if(req.params.id > tours.length) {
+    res.status(204).json({
+        status: 'success',
+        data: null
+    })
+}
+
+// Middlewares
+const checkIDMiddleware = (req, res, next) => {
+    const tourId = req.params.id * 1
+    const tour = tours.find(el => el.id === tourId);
+    if(!tour) {
         return res.status(404).json({
             status: 'fail',
             message: 'Invalid ID'
         })
     }
-
-    res.status(204).json({
-        status: 'success',
-        data: null
-    })
+    req.tour = tour
+    next()
 }
 
 module.exports = {
@@ -82,5 +74,6 @@ module.exports = {
     getAllTours,
     getTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    checkIDMiddleware
 }
