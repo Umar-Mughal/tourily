@@ -12,7 +12,6 @@ router
 
 router
   .route('/:id')
-  .all(tourController.checkIDMiddleware)
   .get(tourController.getTour)
   .patch(tourController.updateTour)
   .delete(tourController.deleteTour);
