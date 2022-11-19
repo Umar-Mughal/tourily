@@ -4,8 +4,10 @@ const tourSchema = mongoose.Schema({
   name: {
     type: String,
     required: [true, 'A tour must have a name.'],
-    unique: [true, 'Tour name should be unique'],
+    unique: [true, 'Tour name should be unique.'],
   },
+  duration: Number,
+  difficulty: String,
   rating: {
     type: Number,
     default: 4.5,
