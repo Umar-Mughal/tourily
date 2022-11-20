@@ -1,7 +1,7 @@
 // Packages
 const express = require('express');
 // Controllers
-const tourController = require('../controllers/tour.controller');
+const tourController = require('../controllers/tour/tourController');
 // Validators
 const tourValidator = require('../validators/tour.validator');
 

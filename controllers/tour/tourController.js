@@ -1,5 +1,5 @@
 // Models
-const Tour = require('../models/tour.model');
+const Tour = require('../../models/tour/tourModel');
 
 const createTour = async (req, res) => {
   try {

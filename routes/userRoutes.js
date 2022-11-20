@@ -1,7 +1,7 @@
 // Packages
 const express = require('express');
 // Controllers
-const userController = require('../controllers/user.controller');
+const userController = require('../controllers/user/userController');
 
 const router = express.Router();
 
