@@ -1,5 +1,5 @@
 // Models
-const Tour = require('../../models/tour/tourModel');
+const Tour = require('../../../models/tour/tourModel');
 
 const createTour = async (req, res) => {
   try {
@@ -43,7 +43,7 @@ const getQuery = async (req) => {
     }
     // Pagination
     const page = reqQuery.page * 1 || 1;
-    const limit = reqQuery.limit * 1 || 5;
+    const limit = reqQuery.limit * 1 || 10;
     const skip = (page - 1) * limit;
     query = query.skip(skip).limit(limit);
     if (reqQuery.page) {

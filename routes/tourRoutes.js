@@ -1,11 +1,17 @@
 // Packages
 const express = require('express');
 // Controllers
-const tourController = require('../controllers/tour/tourController');
+const tourController = require('../http/controllers/tour/tourController');
 // Validators
-const tourValidator = require('../validators/tour.validator');
+const tourValidator = require('../http/validators/tour/tourValidator');
+// Middlewares
+const tourMiddleware = require('../http/middlewares/tour/tourMiddleware');
 
 const router = express.Router();
+
+router
+  .route('/top-5-cheap')
+  .get(tourMiddleware.aliasTopTours, tourController.getAllTours);
 
 router
   .route('/')
