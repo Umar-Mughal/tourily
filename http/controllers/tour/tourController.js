@@ -104,10 +104,50 @@ const deleteTour = async (req, res) => {
   }
 };
 
+const getToursStats = async (req, res) => {
+  try {
+    const stats = await Tour.aggregate([
+      {
+        $match: { price: { $gte: 500 } },
+      },
+      {
+        $group: {
+          _id: { $toUpper: '$difficulty' },
+          numTours: { $sum: 1 },
+          numRatings: { $sum: '$ratingsQuantity' },
+          avgRating: { $avg: '$ratingsAverage' },
+          avgPrice: { $avg: '$price' },
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
+        },
+      },
+      {
+        $sort: { avgPrice: 1 },
+      },
+      {
+        $match: { _id: { $ne: 'EASY' } },
+      },
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        stats,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'fail',
+      data: err,
+    });
+  }
+};
+
 module.exports = {
   createTour,
   getAllTours,
   getTour,
   updateTour,
   deleteTour,
+  getToursStats,
 };

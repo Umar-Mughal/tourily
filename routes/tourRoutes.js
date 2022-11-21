@@ -13,6 +13,8 @@ router
   .route('/top-5-cheap')
   .get(tourMiddleware.aliasTopTours, tourController.getAllTours);
 
+router.route('/tours-stats').get(tourController.getToursStats);
+
 router
   .route('/')
   .get(tourController.getAllTours)
