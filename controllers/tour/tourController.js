@@ -1,5 +1,4 @@
 // Models
-const queryObjing = require('querystring');
 const Tour = require('../../models/tour/tourModel');
 
 const createTour = async (req, res) => {
@@ -33,7 +32,7 @@ const getQuery = (req) => {
   } else {
     query = query.sort('-createdAt');
   }
-  // Field Limiting or Projecting
+  // Fields Limiting or Projecting
   if (req.query.fields) {
     const fields = req.query.fields.split(',').join(' ');
     query = query.select(fields);
