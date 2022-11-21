@@ -18,29 +18,44 @@ const createTour = async (req, res) => {
   }
 };
 
-const getQuery = (req) => {
-  // Filters
-  const queryStr = JSON.stringify({ ...req.query });
-  const queryObj = JSON.parse(
-    queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
-  );
-  let query = Tour.find(queryObj);
-  // Sorting
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort('-createdAt');
+const getQuery = async (req) => {
+  try {
+    // Filtering
+    const reqQuery = { ...req.query };
+    const queryStr = JSON.stringify(reqQuery);
+    const queryObj = JSON.parse(
+      queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
+    );
+    let query = Tour.find(queryObj);
+    // Sorting
+    if (reqQuery.sort) {
+      const sortBy = reqQuery.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+    // Fields Limiting or Projecting
+    if (reqQuery.fields) {
+      const fields = reqQuery.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');
+    }
+    // Pagination
+    const page = reqQuery.page * 1 || 1;
+    const limit = reqQuery.limit * 1 || 5;
+    const skip = (page - 1) * limit;
+    query = query.skip(skip).limit(limit);
+    if (reqQuery.page) {
+      const numTours = await Tour.countDocuments();
+      if (skip >= numTours) {
+        throw new Error('This page does not exist.');
+      }
+    }
+    return query;
+  } catch (err) {
+    throw new Error(err.message);
   }
-  // Fields Limiting or Projecting
-  if (req.query.fields) {
-    const fields = req.query.fields.split(',').join(' ');
-    query = query.select(fields);
-  } else {
-    query = query.select('-__v');
-  }
-
-  return query;
 };
 
 const getAllTours = async (req, res) => {
@@ -57,7 +72,7 @@ const getAllTours = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err,
+      message: err.message || err,
     });
   }
 };
