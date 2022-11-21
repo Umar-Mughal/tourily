@@ -1,5 +1,7 @@
 // Models
 const Tour = require('../../../models/tour/tourModel');
+// Base
+const APIFeatures = require('../../base/APIFeatures');
 
 const createTour = async (req, res) => {
   try {
@@ -20,38 +22,11 @@ const createTour = async (req, res) => {
 
 const getQuery = async (req) => {
   try {
-    // Filtering
-    const reqQuery = { ...req.query };
-    const queryStr = JSON.stringify(reqQuery);
-    const queryObj = JSON.parse(
-      queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
-    );
-    let query = Tour.find(queryObj);
-    // Sorting
-    if (reqQuery.sort) {
-      const sortBy = reqQuery.sort.split(',').join(' ');
-      query = query.sort(sortBy);
-    } else {
-      query = query.sort('-createdAt');
-    }
-    // Fields Limiting or Projecting
-    if (reqQuery.fields) {
-      const fields = reqQuery.fields.split(',').join(' ');
-      query = query.select(fields);
-    } else {
-      query = query.select('-__v');
-    }
-    // Pagination
-    const page = reqQuery.page * 1 || 1;
-    const limit = reqQuery.limit * 1 || 10;
-    const skip = (page - 1) * limit;
-    query = query.skip(skip).limit(limit);
-    if (reqQuery.page) {
-      const numTours = await Tour.countDocuments();
-      if (skip >= numTours) {
-        throw new Error('This page does not exist.');
-      }
-    }
+    const { query } = new APIFeatures(Tour, req.query)
+      .filter()
+      .sort()
+      .select()
+      .paginate();
     return query;
   } catch (err) {
     throw new Error(err.message);
