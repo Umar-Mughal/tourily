@@ -31,8 +31,16 @@ const getQuery = (req) => {
     const sortBy = req.query.sort.split(',').join(' ');
     query = query.sort(sortBy);
   } else {
-    query.sort('-createdAt');
+    query = query.sort('-createdAt');
   }
+  // Field Limiting or Projecting
+  if (req.query.fields) {
+    const fields = req.query.fields.split(',').join(' ');
+    query = query.select(fields);
+  } else {
+    query = query.select('-__v');
+  }
+
   return query;
 };
 
