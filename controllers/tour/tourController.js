@@ -20,7 +20,14 @@ const createTour = async (req, res) => {
 
 const getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    // Build Query
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
+    const query = Tour.find(queryObj);
+    // Execute Query
+    const tours = await query;
+    // Send Response
     res.status(200).json({
       status: 'success',
       results: tours.length,
@@ -38,8 +45,7 @@ const getAllTours = async (req, res) => {
 
 const getTour = async (req, res) => {
   try {
-    // const tour = await Tour.findOne({ _id: req.params.id });
-    const tour = await Tour.findById(req.params.id); // just a shorthand of above
+    const tour = await Tour.findById(req.params.id);
     res.status(200).json({
       status: 'success',
       data: {
