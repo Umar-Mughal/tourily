@@ -12,7 +12,7 @@ const router = express.Router();
 router
   .route('/top-5-cheap')
   .get(tourMiddleware.aliasTopTours, tourController.getAllTours);
-
+router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
 router.route('/tours-stats').get(tourController.getToursStats);
 
 router
