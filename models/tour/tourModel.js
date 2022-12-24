@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const tourSchema = mongoose.Schema(
   {
@@ -7,6 +8,7 @@ const tourSchema = mongoose.Schema(
       required: [true, 'A tour must have a name.'],
       unique: [true, 'Tour name should be unique.'],
     },
+    slug: String,
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration.'],
@@ -59,8 +61,20 @@ const tourSchema = mongoose.Schema(
   }
 );
 
+/** VIRTUAL PROPERTIES **/
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
+});
+
+/** DOCUMENT MIDDLEWARES **/
+//Runs before .save() and .create(), but not for .insertMany()
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+//Runs After .save() and .create()
+tourSchema.post('save', (doc, next) => {
+  next();
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
