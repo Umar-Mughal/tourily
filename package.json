@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "NODE_ENV=dev nodemon main.js",
     "prod": "NODE_ENV=prod node main.js",
+    "debug": "NODE_ENV=dev nodemon --inspect main.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx ."
+  },
+  "scriptsComments": {
+    "debug": "(1) run 'npm run debug' (2) Go to chrome://inspect, click on 'Open dedicated DevTools for Node' (3) Go to sources tab (4) Expand the path and Go to file:// to find the source code (5) Now you can now put breakpoints"
   },
   "author": "Umar Farooq",
   "license": "ISC",
