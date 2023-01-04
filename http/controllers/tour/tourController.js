@@ -1,7 +1,7 @@
 // Models
 const Tour = require('../../../models/tour/tourModel');
 // Base
-const APIFeatures = require('../../base/APIFeatures');
+const ApiFeatures = require('../../base/ApiFeatures');
 
 const createTour = async (req, res) => {
   try {
@@ -22,7 +22,7 @@ const createTour = async (req, res) => {
 
 const getQuery = async (req) => {
   try {
-    const { query } = new APIFeatures(Tour, req.query)
+    const { query } = new ApiFeatures(Tour, req.query)
       .filter()
       .sort()
       .select()

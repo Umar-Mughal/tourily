@@ -1,4 +1,4 @@
-class APIFeatures {
+class ApiFeatures {
   constructor(Model, reqQuery) {
     this.Model = Model;
     this.query = Model.find();
@@ -43,4 +43,4 @@ class APIFeatures {
   }
 }
 
-module.exports = APIFeatures;
+module.exports = ApiFeatures;

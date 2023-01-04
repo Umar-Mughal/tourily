@@ -1,8 +1,7 @@
+const AppError = require('../../base/AppError');
+
 const notFound = (req, res, next) => {
-  const err = new Error(`Can't find ${req.originalUrl} on this server!`);
-  err.status = 'fail';
-  err.statusCode = 404;
-  next(err);
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 };
 
 //---- Global Error Handler ----//
@@ -10,7 +9,7 @@ const notFound = (req, res, next) => {
  * It has 4 parameters, so whenever we want to send an error, we have to call next(err) with an argument
  * then express will automatically skip all the middlewares, and call this middleware (see notFound function)
  * */
-const handleError = (err, req, res, next) => {
+const handleErrorGlobally = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
   res.status(err.statusCode).json({
@@ -21,5 +20,5 @@ const handleError = (err, req, res, next) => {
 
 module.exports = {
   notFound,
-  handleError,
+  handleErrorGlobally,
 };
