@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 // Controllers
-const notFoundController = require('./http/controllers/notFound/notFoundController');
+const errorHandlerController = require('./http/controllers/error/errorHandlerController');
 
 const app = express();
 
@@ -19,6 +19,7 @@ app.use(express.static(`${__dirname}/public`));
 //---- Routes ----//
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
-app.all('*', notFoundController.notFound);
+app.all('*', errorHandlerController.notFound);
+app.use(errorHandlerController.handleError);
 
 module.exports = app;
