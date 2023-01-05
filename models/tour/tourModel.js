@@ -106,12 +106,9 @@ tourSchema.post('save', (doc, next) => {
 // This /^find/ RE will trigger this function for all the queries contain word "find".
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
-  this.start = Date.now();
   next();
 });
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds.`);
-  console.log(docs);
+tourSchema.post(/^find/, (docs, next) => {
   next();
 });
 

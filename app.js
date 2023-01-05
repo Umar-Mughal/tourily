@@ -4,7 +4,7 @@ const express = require('express');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 // Controllers
-const errorHandlerController = require('./http/controllers/error/errorHandlerController');
+const errorHandlerController = require('./http/controllers/error/errorController');
 
 const app = express();
 
