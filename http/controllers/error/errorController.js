@@ -3,10 +3,25 @@ const AppError = require('../../base/AppError');
 // Configs
 const { DEV, PROD } = require('../../../configs/constants');
 
+//---- Route Not Found Error ----//
 const notFound = (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 };
 
+//---- DB Errors ----//
+const handleCastErrorDB = (err) =>
+  new AppError(`Invalid ${err.path}: ${err.value}.`, 400);
+const handleDuplicateFieldsDB = (err) =>
+  new AppError(`Duplicate field value: x. Please use another value.`, 400);
+
+//---- Making Error Object For Production ----//
+const getProductionErrorObj = (err) => {
+  if (err.name === 'CastError') return handleCastErrorDB(err);
+  if (err.code === 11000) return handleDuplicateFieldsDB(err);
+  return err;
+};
+
+//---- Shows any kind of error in detail ----//
 const sendErrorToDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -16,6 +31,7 @@ const sendErrorToDev = (err, res) => {
   });
 };
 
+//---- Shows minimal details about errors ----//
 const sendErrorToProd = (err, res) => {
   /* Operational errors are Trusted Errors: Means, all those errors we have handled ourselves, can only be sent to production. No other unexpected/unknown errors, like programming errors (a Programmer does), or any 3rd party package error, will be leaked to production. */
   if (err.isOperationl) {
@@ -29,17 +45,6 @@ const sendErrorToProd = (err, res) => {
       status: 'error',
       message: 'Server Error!!!',
     });
-  }
-};
-
-const getProductionErrorObj = (err) => {
-  switch (err.name) {
-    //---- DB Errors ----//
-    case 'CastError':
-      return new AppError(`Invalid ${err.path}: ${err.value}.`, 400);
-    //---- Default No Modification ----//
-    default:
-      return err;
   }
 };
 
