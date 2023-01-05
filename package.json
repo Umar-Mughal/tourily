@@ -5,13 +5,14 @@
   "main": "app.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon main.js",
-    "prod": "NODE_ENV=production node main.js",
+    "prod": "NODE_ENV=production nodemon main.js",
     "debug": "NODE_ENV=development nodemon --inspect main.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx ."
   },
   "scriptsComments": {
-    "debug": "(1) run 'npm run debug' (2) Go to chrome://inspect, click on 'Open dedicated DevTools for Node' (3) Go to sources tab (4) Expand the path and Go to file:// to find the source code (5) Now you can now put breakpoints"
+    "debug": "(1) run 'npm run debug' (2) Go to chrome://inspect, click on 'Open dedicated DevTools for Node' (3) Go to sources tab (4) Expand the path and Go to file:// to find the source code (5) Now you can now put breakpoints",
+    "prod": "in real case run prod using node not with nodemon"
   },
   "author": "Umar Farooq",
   "license": "ISC",

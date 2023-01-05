@@ -11,13 +11,18 @@ const notFound = (req, res, next) => {
 //---- DB Errors ----//
 const handleCastErrorDB = (err) =>
   new AppError(`Invalid ${err.path}: ${err.value}.`, 400);
-const handleDuplicateFieldsDB = (err) =>
+const handleDuplicateFieldsErrorDB = (err) =>
   new AppError(`Duplicate field value: x. Please use another value.`, 400);
+const handleValidationErrorDB = (err) => {
+  const errors = Object.values(err.errors).map((el) => el.message);
+  return new AppError(`Invalid Input Data:- ${errors.join('. ')}`, 400);
+};
 
 //---- Making Error Object For Production ----//
 const getProductionErrorObj = (err) => {
   if (err.name === 'CastError') return handleCastErrorDB(err);
-  if (err.code === 11000) return handleDuplicateFieldsDB(err);
+  if (err.code === 11000) return handleDuplicateFieldsErrorDB(err);
+  if (err.name === 'ValidationError') return handleValidationErrorDB(err);
   return err;
 };
 
