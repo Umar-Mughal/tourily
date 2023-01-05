@@ -1,4 +1,4 @@
-require('../envs/envs');
+require('../envs/env');
 require('../configs/db');
 
 const importData = async (Model, data) => {
